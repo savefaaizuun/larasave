@@ -20,6 +20,10 @@
     <!-- Custom styles for this template -->
     <link href="assets/bootstrap/css/navbar-fixed-top.css" rel="stylesheet">
 
+    <!-- <link type="text/css" href="http://cdn.datatables.net/1.10.4/css/jquery.dataTables.min.css" rel="stylesheet" /> -->
+
+    <link href="assets/dataTables/jquery.dataTables.min.css" rel="stylesheet">
+
     <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
     <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
     <script src="assets/bootstrap/js/ie-emulation-modes-warning.js"></script>
@@ -75,14 +79,31 @@
     <div class="container">
 
       <!-- Main component for a primary marketing message or call to action -->
-      <div class="jumbotron">
-        <h1>Navbar example</h1>
-        <p>This example is a quick exercise to illustrate how the default, static and fixed to top navbar work. It includes the responsive CSS and HTML, so it also adapts to your viewport and device.</p>
-        <p>To see the difference between static and fixed top navbars, just scroll.</p>
-        <p>
-          <a class="btn btn-lg btn-primary" href="../../components/#navbar" role="button">View navbar docs &raquo;</a>
-        </p>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4>Contact List
+                <a onclick="#" class="btn btn-primary pull-right" style="margin-top:-8px;">Add Contact</a>
+              </h4>
+            </div>
+            <div class="panel-body">
+              <table id="contact-table" class="table table-striped">
+                <thead>
+                  <tr>
+                    <th width="30">No</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
       </div>
+      
 
     </div> <!-- /container -->
 
@@ -91,8 +112,25 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="{{ asset('assets/js/jquery-2.1.1.js')}}"></script>
-    <script src="{{ asset('assets/bootstrap/bootstrap.min.js')}} "></script>
+    <script src="{{ asset('assets/bootstrap/js/bootstrap.min.js')}} "></script>
+    <!-- Datatables -->
+    <script src="{{ asset('assets/dataTables/dataTables.bootstrap.min.js')}} "></script>
+    <script src="{{ asset('assets/dataTables/jquery.dataTables.min.js')}} "></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="{{ asset('assets/js/ie10-viewport-bug-workaround.js')}}"></script>
+
+    <script type="text/javascript">
+    $('#contact-table').DataTable({
+      processing: true,
+      serverSide: true,
+      ajax: "{{ route('api.contact')}}",
+      columns: [
+        {data: 'id', name:'id'},
+        {data: 'name', name:'name'},
+        {data: 'email', name:'email'},
+        {data: 'action', name:'action', orderable:false, searchable: false}
+      ]
+    });
+    </script>
   </body>
 </html>
