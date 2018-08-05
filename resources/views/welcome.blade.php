@@ -22,7 +22,7 @@
 
     <!-- <link type="text/css" href="http://cdn.datatables.net/1.10.4/css/jquery.dataTables.min.css" rel="stylesheet" /> -->
 
-    <link href="assets/dataTables/jquery.dataTables.min.css" rel="stylesheet">
+    <link href="assets/dataTables/dataTables.bootstrap.min.css" rel="stylesheet">
 
     <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
     <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
@@ -84,7 +84,7 @@
           <div class="panel panel-default">
             <div class="panel-heading">
               <h4>Contact List
-                <a onclick="#" class="btn btn-primary pull-right" style="margin-top:-8px;">Add Contact</a>
+                <a onclick="addForm()" class="btn btn-primary pull-right" style="margin-top:-8px;">Add Contact</a>
               </h4>
             </div>
             <div class="panel-body">
@@ -103,6 +103,10 @@
           </div>
         </div>
       </div>
+
+    </div>
+
+    @include('form')
       
 
     </div> <!-- /container -->
@@ -114,8 +118,12 @@
     <script src="{{ asset('assets/js/jquery-2.1.1.js')}}"></script>
     <script src="{{ asset('assets/bootstrap/js/bootstrap.min.js')}} "></script>
     <!-- Datatables -->
-    <script src="{{ asset('assets/dataTables/dataTables.bootstrap.min.js')}} "></script>
     <script src="{{ asset('assets/dataTables/jquery.dataTables.min.js')}} "></script>
+    <script src="{{ asset('assets/dataTables/dataTables.bootstrap.min.js')}} "></script>
+    <!-- validator -->
+    <!-- <script src="{{ asset('assets/js/validator.min.js')}}"></script> -->
+    <script src="{{ asset('assets/js/validator.min.js')}}"></script>
+    
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="{{ asset('assets/js/ie10-viewport-bug-workaround.js')}}"></script>
 
@@ -131,6 +139,42 @@
         {data: 'action', name:'action', orderable:false, searchable: false}
       ]
     });
+
+    function addForm(){
+      save_method = "add";
+      $('input[name=_method]').val('POST');
+      $('#modal-form').modal('show');
+      $('#modal-form form')[0].reset();
+      $('.modal-title').text('Add Contact');
+    }
+
+    $(function(){
+      $('#modal-form form').validator().on('submit', function (e) {
+        console.log('masuk');
+        if (!e.isDefaultPrevented()) {
+          var id = $('#id').val();
+          console.log(id);
+          if (save_method == 'add') url = "{{ url('contact') }}";
+          else url = "{{ url('contact') . '/'}}" + id;
+
+          $.ajax({
+            url : url,
+            type : "POST",
+            data : $('#modal-form form').serialize(),
+            success : function($data){
+              console.log('sukses');
+              $('#modal-form').modal('hide');
+            },
+            error : function(){
+              console.log('blm sukses');
+             alert('Oops! Something error'); 
+            }
+          });
+          return false;
+        } 
+      });
+    });
+
     </script>
   </body>
 </html>
