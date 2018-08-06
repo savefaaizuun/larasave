@@ -128,17 +128,17 @@
     <script src="{{ asset('assets/js/ie10-viewport-bug-workaround.js')}}"></script>
 
     <script type="text/javascript">
-    $('#contact-table').DataTable({
-      processing: true,
-      serverSide: true,
-      ajax: "{{ route('api.contact')}}",
-      columns: [
-        {data: 'id', name:'id'},
-        {data: 'name', name:'name'},
-        {data: 'email', name:'email'},
-        {data: 'action', name:'action', orderable:false, searchable: false}
-      ]
-    });
+    var table = $('#contact-table').DataTable({
+                  processing: true,
+                  serverSide: true,
+                  ajax: "{{ route('api.contact')}}",
+                  columns: [
+                    {data: 'id', name:'id'},
+                    {data: 'name', name:'name'},
+                    {data: 'email', name:'email'},
+                    {data: 'action', name:'action', orderable:false, searchable: false}
+                  ]
+                });
 
     function addForm(){
       save_method = "add";
@@ -153,7 +153,6 @@
         console.log('masuk');
         if (!e.isDefaultPrevented()) {
           var id = $('#id').val();
-          console.log(id);
           if (save_method == 'add') url = "{{ url('contact') }}";
           else url = "{{ url('contact') . '/'}}" + id;
 
@@ -164,9 +163,9 @@
             success : function($data){
               console.log('sukses');
               $('#modal-form').modal('hide');
+              table.ajax.reload();
             },
             error : function(){
-              console.log('blm sukses');
              alert('Oops! Something error'); 
             }
           });

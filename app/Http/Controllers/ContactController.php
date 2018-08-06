@@ -37,10 +37,13 @@ class ContactController extends Controller
      */
     public function store(Request $request)
     {
+
         $data = [
             'name' => $request['name'],
             'email' => $request['email']
         ];
+
+        // print_r($data);die;
 
         return Contact::create($data);
     }
