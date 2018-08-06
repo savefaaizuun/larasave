@@ -148,6 +148,30 @@
       $('.modal-title').text('Add Contact');
     }
 
+    function editForm(id){
+      save_method = 'edit';
+      console.log(save_method);
+      console.log(id);
+      $('input[name=_method]').val('PATCH');
+      $('#modal-form form')[0].reset();
+      $.ajax({
+        url: "{{ url('contact') }}" + '/' + id + "/edit",
+        type:"GET",
+        dataType:"JSON",
+        success: function(data){
+         $('#modal-form').modal('show');
+         $('.modal-title').text('Edit Contact');
+
+         $('#id').val(data.id);
+         $('#name').val(data.name);
+         $('#email').val(data.email); 
+        },
+        error : function() {
+          alert("Data tidak di temukan");
+        }
+      });
+    }
+
     $(function(){
       $('#modal-form form').validator().on('submit', function (e) {
         console.log('masuk');
@@ -160,7 +184,7 @@
             url : url,
             type : "POST",
             data : $('#modal-form form').serialize(),
-            success : function($data){
+            success : function(data){
               console.log('sukses');
               $('#modal-form').modal('hide');
               table.ajax.reload();

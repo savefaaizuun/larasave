@@ -67,7 +67,10 @@ class ContactController extends Controller
      */
     public function edit($id)
     {
-        //
+        $contact = Contact::find($id);
+        // echo "<pre>";
+        // print_r($contact);die;
+        return $contact;
     }
 
     /**
