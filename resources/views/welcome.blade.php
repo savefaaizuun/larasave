@@ -196,7 +196,7 @@
           success : function(data) {
             table.ajax.reload();
             // console.log(data);
-            console.log('kehapus');
+            // console.log('kehapus');
             swal({
               title: 'Success!',
               text : 'Data berhasil di hapus',
@@ -245,9 +245,31 @@
               console.log('sukses');
               $('#modal-form').modal('hide');
               table.ajax.reload();
+              if (save_method == 'add') {
+                swal({
+                  title: 'Success!',
+                  text : 'Data berhasil di tambahkan',
+                  type : 'success',
+                  timer : '1500' 
+                })
+              } else {
+                swal({
+                  title: 'Success!',
+                  text : 'Data berhasil di update',
+                  type : 'success',
+                  timer : '1500' 
+                })  
+              }
+              
             },
             error : function(){
-             alert('Oops! Something error'); 
+             // alert('Oops! Something error'); 
+               swal({
+                title : 'Oops ...',
+                text : 'terjasi kesalahan!',
+                type : 'error',
+                timer : '1500'
+              })
             }
           });
           return false;

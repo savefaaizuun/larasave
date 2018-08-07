@@ -109,7 +109,7 @@ class ContactController extends Controller
         return Datatables::of($contact)
             ->addColumn('action', function($contact){
                 return '<a href="#" class="btn btn-info btn-xs"><i class="glyphicon glyphicon-eye-open"></i>Show</a> '.
-                    '<a onclick="editForm('.$contact->id.')" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-edit"></i> Edit</a>'.
+                    '<a onclick="editForm('.$contact->id.')" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-edit"></i> Edit</a> '.
                     '<a onclick="deleteData('.$contact->id.')" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash"></i> Delete</a>';
             })->make(true);
     }
