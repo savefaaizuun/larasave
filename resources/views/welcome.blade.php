@@ -7,6 +7,7 @@
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="">
     <meta name="author" content="">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="icon" href="../../favicon.ico">
 
     <title>Fixed Top Navbar Example for Bootstrap</title>
@@ -20,9 +21,12 @@
     <!-- Custom styles for this template -->
     <link href="assets/bootstrap/css/navbar-fixed-top.css" rel="stylesheet">
 
-    <!-- <link type="text/css" href="http://cdn.datatables.net/1.10.4/css/jquery.dataTables.min.css" rel="stylesheet" /> -->
-
+    <!--Datatables -->
     <link href="assets/dataTables/dataTables.bootstrap.min.css" rel="stylesheet">
+
+    <!--SweeetAlert -->
+    <script src="assets/sweetalert2/sweetalert2.min.js"></script>
+    <link href="assets/sweetalert2/sweetalert2.min.css" rel="stylesheet">
 
     <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
     <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
@@ -172,13 +176,66 @@
       });
     }
 
+    function deleteData(id){
+      // var popup = confirm("are you sure for delete this data?");
+      var csrf_token = $('meta[name="csrf-token"]').attr('content');
+      swal({
+        title: 'Apakah anda yakin?',
+        text: 'Anda tidak dapat mengembalikan ini!',
+        type: 'warning',
+        showCancelButton: true,
+        cancelButtonColor: '#d33',
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'Iya, hapus ini!'
+      }).then((result) => {
+        if (result.value) {
+          $.ajax({
+          url : "{{ url('contact')}}"+ '/' + id,
+          type : "POST",
+          data : {'_method' : 'DELETE', '_token' : csrf_token},
+          success : function(data) {
+            table.ajax.reload();
+            // console.log(data);
+            console.log('kehapus');
+            swal({
+              title: 'Success!',
+              text : 'Data berhasil di hapus',
+              type : 'success',
+              timer : '1500' 
+            })
+          },
+          error : function (){
+            swal({
+              title : 'Oops ...',
+              text : 'terjasi kesalahan!',
+              type : 'error',
+              timer : '1500'
+            })
+          }
+        });
+        } else {
+          swal({
+              title: 'Data batal hapus!',
+              text : 'Batal Hapus',
+              type : 'success',
+              timer : '1500' 
+            })
+        }
+        
+      });
+    }
+
+    
+
     $(function(){
       $('#modal-form form').validator().on('submit', function (e) {
         console.log('masuk');
         if (!e.isDefaultPrevented()) {
           var id = $('#id').val();
-          if (save_method == 'add') url = "{{ url('contact') }}";
-          else url = "{{ url('contact') . '/'}}" + id;
+          if (save_method == 'add') 
+            url = "{{ url('contact') }}";
+          else 
+            url = "{{ url('contact') . '/'}}" + id;
 
           $.ajax({
             url : url,
